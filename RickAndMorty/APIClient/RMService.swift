@@ -9,7 +9,11 @@ import Foundation
 final class RMSerivce {
     static let shared = RMSerivce()
     private init () {}
-    public func execute(_ request: RMRequest, completion: @escaping () -> Void) {
+    public func execute<T: Codable>(
+        _ request: RMRequest,
+        expecting type: T.Type,
+    completion: @escaping (Result<T, Error>) -> Void
+    ) {
         
     }
 }
