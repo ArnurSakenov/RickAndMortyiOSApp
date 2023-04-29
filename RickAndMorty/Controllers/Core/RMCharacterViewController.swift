@@ -6,20 +6,19 @@
 //
 
 import UIKit
-
+import SnapKit
 final class RMCharacterViewController: UIViewController {
-
+    private let characterListView = RMCharacterListView()
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
         title = "Characters"
-        // Do any additional setup after loading the view.
-        let request = RMRequest(endpoint: .character,
-        queryParameters: [
-        URLQueryItem(name: "name", value: "rick"),
-        URLQueryItem(name: "status", value: "alive")
-        ])
-        RMSerivce.shared.execute(request, expecting: RMCharacter.self) { result in
+        setUpView()
+    }
+    private func setUpView(){
+        view.addSubview(characterListView)
+        characterListView.snp.makeConstraints { make in
+            make.edges.equalTo(view.safeAreaLayoutGuide.snp.edges)
         }
     }
 
