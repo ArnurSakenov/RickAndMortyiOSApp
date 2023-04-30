@@ -12,7 +12,8 @@ final class RMCharacterCollectionViewCell: UICollectionViewCell {
     static let cellIdentifier = "RMCharacterCollectionViewCell"
     private let imageView: UIImageView = {
         let image = UIImageView()
-        image.contentMode = .scaleAspectFit
+        image.contentMode = .scaleAspectFill
+        image.clipsToBounds = true
         image.translatesAutoresizingMaskIntoConstraints = false
         return image
     }()
@@ -37,22 +38,28 @@ final class RMCharacterCollectionViewCell: UICollectionViewCell {
         contentView.addSubviews(imageView,nameLabel,statusLabel)
         addConstraints()
     }
+    private func setUpLayer(){
+        contentView.layer.cornerRadius = 8
+        contentView.layer.shadowColor = UIColor.label.cgColor
+        contentView.layer.shadowOffset = CGSize(width: -4, height: 4)
+        contentView.layer.shadowOpacity = 0.3
+    }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     private func addConstraints(){
         statusLabel.snp.makeConstraints { make in
-            make.height.equalTo(40)
-            make.left.equalTo(super.snp.left).offset(5)
-            make.right.equalTo(super.snp.right).offset(-5)
+            make.height.equalTo(30)
+            make.left.equalTo(super.snp.left).offset(7)
+            make.right.equalTo(super.snp.right).offset(-7)
             make.bottom.equalTo(super.snp.bottom).offset(-3)
         }
         nameLabel.snp.makeConstraints { make in
-            make.height.equalTo(40)
-            make.left.equalTo(super.snp.left).offset(5)
-            make.right.equalTo(super.snp.right).offset(-5)
-            make.bottom.equalTo(statusLabel.snp.top).offset(-3)
+            make.height.equalTo(30)
+            make.left.equalTo(super.snp.left).offset(7)
+            make.right.equalTo(super.snp.right).offset(-7)
+            make.bottom.equalTo(statusLabel.snp.top)
         }
         imageView.snp.makeConstraints { make in
             make.left.equalTo(super.snp.left)
@@ -60,9 +67,10 @@ final class RMCharacterCollectionViewCell: UICollectionViewCell {
             make.top.equalTo(super.snp.top)
             make.bottom.equalTo(nameLabel.snp.top).offset(-3)
         }
-        imageView.backgroundColor = .green
-        nameLabel.backgroundColor = .red
-        statusLabel.backgroundColor = .orange
+    }
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        setUpLayer()
     }
      override func prepareForReuse() {
         super.prepareForReuse()
