@@ -30,6 +30,7 @@ final class RMCharacterListView: UIView {
         collection.alpha = 0
         collection.translatesAutoresizingMaskIntoConstraints = false
         collection.register(RMCharacterCollectionViewCell.self, forCellWithReuseIdentifier: RMCharacterCollectionViewCell.cellIdentifier)
+        collection.register(RMFooterLoadingCollectionReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: RMFooterLoadingCollectionReusableView.identifier)
         return collection
     }()
     override init(frame: CGRect) {
