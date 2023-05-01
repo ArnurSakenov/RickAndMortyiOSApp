@@ -7,9 +7,13 @@
 
 import UIKit
 import SnapKit
+protocol RMCharacterListViewDelegate: AnyObject {
+    func rmCharacterListView(_ characterListView: RMCharacterListView,
+                             didSelectCharacter character: RMCharacter)
+}
 // view shows list of characters,loaders
 final class RMCharacterListView: UIView {
-
+    public weak var delegate: RMCharacterListViewDelegate?
     private let viewModel = RMCharacterListViewModel()
     private let spinner: UIActivityIndicatorView = {
         let spinner = UIActivityIndicatorView(style: .large)
@@ -20,7 +24,7 @@ final class RMCharacterListView: UIView {
     private let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
-        layout.sectionInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 10, bottom: 10, right: 10)
         let collection = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collection.isHidden = true
         collection.alpha = 0
@@ -58,6 +62,10 @@ final class RMCharacterListView: UIView {
     }
 }
 extension RMCharacterListView: RMCharacterListViewModelDelegate {
+    func didSelectCharacter(_ character: RMCharacter) {
+        delegate?.rmCharacterListView(self, didSelectCharacter: character)
+    }
+    
     func didLoadInitialCharacters() {
         
         spinner.stopAnimating()
