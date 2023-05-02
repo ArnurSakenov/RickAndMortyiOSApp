@@ -12,13 +12,15 @@ protocol RMCharacterListViewModelDelegate: AnyObject {
 }
 final class RMCharacterListViewModel: NSObject {
     public weak var delegate: RMCharacterListViewModelDelegate?
+    
+    private var isLoadingMoreCharacters = false
+    
     private var characters: [RMCharacter] = [] {
         didSet {
             for character in characters {
                 let viewModel = RMCharacterCollectionViewCellViewModel(characterName: character.name, characterStatus: character.status, characterImageUrl: URL(string: character.image))
                 cellViewModels.append(viewModel)
             }
-            
         }
     }
     private var cellViewModels: [RMCharacterCollectionViewCellViewModel] = []
@@ -40,7 +42,7 @@ final class RMCharacterListViewModel: NSObject {
             }}
     }
     public func fetchAdditionalCharacters() {
-        
+        isLoadingMoreCharacters = true
     }
     public var shouldShowLoadMoreIndicator: Bool {
         return apiInfo?.next != nil
@@ -92,11 +94,15 @@ extension RMCharacterListViewModel: UICollectionViewDataSource, UICollectionView
 }
 extension RMCharacterListViewModel: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        guard shouldShowLoadMoreIndicator else {
+        guard shouldShowLoadMoreIndicator, !isLoadingMoreCharacters else {
             return
         }
         let offset = scrollView.contentOffset.y
         let totalHeight = scrollView.contentSize.height
         let totalScrollViewFixedHeight = scrollView.frame.size.height
+        if offset >= (totalHeight - totalScrollViewFixedHeight) {
+            print("hi")
+            isLoadingMoreCharacters = true
+        }
     }
 }
